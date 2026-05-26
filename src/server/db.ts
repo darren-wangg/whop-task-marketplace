@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 declare global {
-  // eslint-disable-next-line no-var
   var __prisma: PrismaClient | undefined;
 }
 
@@ -16,8 +15,17 @@ function createClient(): PrismaClient {
   return new PrismaClient({ adapter });
 }
 
-export const db: PrismaClient = global.__prisma ?? createClient();
-
-if (process.env.NODE_ENV !== "production") {
-  global.__prisma = db;
+function getClient(): PrismaClient {
+  if (!global.__prisma) {
+    global.__prisma = createClient();
+  }
+  return global.__prisma;
 }
+
+// Lazy proxy: defers client construction (and DATABASE_URL check) until first use.
+// Lets `next build` succeed without a connection string when no route actually queries the DB.
+export const db: PrismaClient = new Proxy({} as PrismaClient, {
+  get(_target, prop, receiver) {
+    return Reflect.get(getClient(), prop, receiver);
+  },
+});
