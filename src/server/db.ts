@@ -6,12 +6,19 @@ declare global {
   var __prisma: PrismaClient | undefined;
 }
 
+// Silences a pg deprecation warning: `sslmode=require/prefer/verify-ca` will
+// change meaning in pg v9, but for now they behave like `verify-full`. We make
+// that explicit so the warning doesn't fire on every cold start.
+function normalizeSslMode(url: string): string {
+  return url.replace(/(\?|&)sslmode=(require|prefer|verify-ca)\b/g, "$1sslmode=verify-full");
+}
+
 function createClient(): PrismaClient {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
+  const raw = process.env.DATABASE_URL;
+  if (!raw) {
     throw new Error("DATABASE_URL is not set. See .env.example for required vars.");
   }
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaPg({ connectionString: normalizeSslMode(raw) });
   return new PrismaClient({ adapter });
 }
 

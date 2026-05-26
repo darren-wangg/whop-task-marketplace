@@ -5,10 +5,17 @@ import { PrismaPg } from "@prisma/adapter-pg";
 loadEnv({ path: ".env.local" });
 loadEnv({ path: ".env" });
 
-const connectionString = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
-if (!connectionString) {
+const rawConnectionString = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
+if (!rawConnectionString) {
   throw new Error("Set DATABASE_URL (or DIRECT_URL) before running the seed.");
 }
+
+// Silence pg's deprecation warning about sslmode=require/prefer/verify-ca:
+// today they behave like verify-full; pg v9 will change that.
+const connectionString = rawConnectionString.replace(
+  /(\?|&)sslmode=(require|prefer|verify-ca)\b/g,
+  "$1sslmode=verify-full",
+);
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 

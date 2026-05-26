@@ -25,10 +25,11 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased ${theme.appearance}`}
+      style={{ colorScheme: theme.appearance }}
       data-appearance={theme.appearance}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <ThemeProvider appearance={theme.appearance} accent={theme.accent}>
           <Header />
           <main className="flex-1">{children}</main>
