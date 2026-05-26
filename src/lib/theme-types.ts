@@ -1,12 +1,5 @@
 export type ThemeAppearance = "light" | "dark";
-export type ThemeAccent =
-  | "orange"
-  | "blue"
-  | "indigo"
-  | "lime"
-  | "magenta"
-  | "tomato"
-  | "lemon";
+export type ThemeAccent = "orange" | "blue" | "indigo" | "lime" | "magenta" | "tomato" | "lemon";
 
 export const APPEARANCE_COOKIE = "themeAppearance";
 export const ACCENT_COOKIE = "themeAccent";

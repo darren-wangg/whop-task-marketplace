@@ -19,17 +19,17 @@ For the system-design overview (data flow, request lifecycle, validator seam), s
 
 ## Commands
 
-| Command | What |
-| --- | --- |
-| `pnpm dev` | Local dev server |
-| `pnpm build` | `prisma generate && next build` |
-| `pnpm lint` | ESLint |
-| `pnpm typecheck` | `tsc --noEmit` |
-| `pnpm format` | Prettier write |
-| `pnpm test` | Vitest run (16 tests: money, manual validator, review service) |
-| `pnpm db:push` | `prisma db push` (schema sync, no migration file) |
-| `pnpm db:migrate` | `prisma migrate dev` (create migration file) |
-| `pnpm db:seed` | `tsx prisma/seed.ts` |
+| Command           | What                                                           |
+| ----------------- | -------------------------------------------------------------- |
+| `pnpm dev`        | Local dev server                                               |
+| `pnpm build`      | `prisma generate && next build`                                |
+| `pnpm lint`       | ESLint                                                         |
+| `pnpm typecheck`  | `tsc --noEmit`                                                 |
+| `pnpm format`     | Prettier write                                                 |
+| `pnpm test`       | Vitest run (16 tests: money, manual validator, review service) |
+| `pnpm db:push`    | `prisma db push` (schema sync, no migration file)              |
+| `pnpm db:migrate` | `prisma migrate dev` (create migration file)                   |
+| `pnpm db:seed`    | `tsx prisma/seed.ts`                                           |
 
 To reset DB: `pnpm db:push --force-reset && pnpm db:seed`.
 

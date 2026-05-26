@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar, Select, Text } from "frosted-ui";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { setActor } from "@/lib/actions/actor";
 
@@ -14,9 +15,11 @@ interface SwitchableAccount {
 interface RoleSwitcherProps {
   accounts: SwitchableAccount[];
   currentId: string;
+  currentKind: "business" | "user";
 }
 
-export function RoleSwitcher({ accounts, currentId }: RoleSwitcherProps) {
+export function RoleSwitcher({ accounts, currentId, currentKind }: RoleSwitcherProps) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -25,7 +28,15 @@ export function RoleSwitcher({ accounts, currentId }: RoleSwitcherProps) {
       value={currentId}
       onValueChange={(value) => {
         if (typeof value !== "string" || value === currentId) return;
-        startTransition(() => setActor(value));
+        const next = accounts.find((a) => a.id === value);
+        const crossingKinds = next ? next.kind !== currentKind : false;
+        startTransition(async () => {
+          await setActor(value);
+          // If we switched account kinds, the current page may be locked to the
+          // old kind (e.g. /business when becoming a user). Navigate somewhere
+          // both kinds can view so the user doesn't bounce off a redirect.
+          if (crossingKinds) router.push("/");
+        });
       }}
       disabled={pending}
     >

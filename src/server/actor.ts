@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import type { Account, AccountKind } from "@prisma/client";
 import { db } from "@/server/db";
 
@@ -23,6 +24,17 @@ export async function requireActor(kind?: AccountKind): Promise<Account> {
   if (kind && actor.kind !== kind) {
     throw new ActorKindError(kind, actor.kind);
   }
+  return actor;
+}
+
+/**
+ * Same intent as `requireActor`, but for page rendering: when the wrong kind is
+ * active (e.g. business viewing /me), redirect home instead of throwing. Server
+ * Actions and route handlers still use `requireActor` so they can return a 403.
+ */
+export async function requirePageActor(kind: AccountKind): Promise<Account> {
+  const actor = await getCurrentActor();
+  if (actor.kind !== kind) redirect("/");
   return actor;
 }
 

@@ -1,10 +1,10 @@
 import { Card, Heading, Text } from "frosted-ui";
-import { requireActor } from "@/server/actor";
+import { requirePageActor } from "@/server/actor";
 import { CreateTaskForm } from "@/components/forms/CreateTaskForm";
 import { FadeIn } from "@/components/motion/FadeIn";
 
 export default async function NewTaskPage() {
-  await requireActor("business");
+  await requirePageActor("business");
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
       <FadeIn>

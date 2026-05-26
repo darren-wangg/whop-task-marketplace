@@ -154,6 +154,7 @@ setActor(id) Server Action  ─── writes cookie 'actorId' ──→  revalid
 ```
 
 `src/server/actor.ts` exposes:
+
 - `getCurrentActor(): Promise<Account>` — reads the cookie, falls back to the first seeded user.
 - `requireActor(kind?)` — throws `ActorKindError` (403) if the wrong kind.
 
@@ -185,6 +186,7 @@ SELECT IdempotencyKey WHERE (key, actorId, scope)
 ```
 
 Wrapped routes (everything that writes):
+
 - `POST /api/tasks` — create task
 - `POST /api/tasks/[id]/accept`
 - `POST /api/tasks/[id]/submit`
@@ -236,15 +238,15 @@ To prevent flash-of-wrong-theme on first paint, `layout.tsx` pre-renders the `li
 
 Two parallel surfaces, one source of truth:
 
-|                      | Server Action            | Route handler            |
-| -------------------- | ------------------------ | ------------------------ |
-| **Trigger**          | `<form action={…}>`      | `fetch('/api/…')`        |
-| **Input parsing**    | FormData → Zod           | JSON → Zod               |
-| **Auth check**       | `requireActor(kind)`     | `requireActorOrError(kind)` |
-| **Service call**     | same                     | same                     |
-| **After success**    | `revalidatePath()` + redirect | `jsonResponse(status, body)` |
-| **Idempotency**      | (not needed — forms)     | `withIdempotency(...)` |
-| **Used by**          | Whop Tasks UI            | external clients per the brief |
+|                   | Server Action                 | Route handler                  |
+| ----------------- | ----------------------------- | ------------------------------ |
+| **Trigger**       | `<form action={…}>`           | `fetch('/api/…')`              |
+| **Input parsing** | FormData → Zod                | JSON → Zod                     |
+| **Auth check**    | `requireActor(kind)`          | `requireActorOrError(kind)`    |
+| **Service call**  | same                          | same                           |
+| **After success** | `revalidatePath()` + redirect | `jsonResponse(status, body)`   |
+| **Idempotency**   | (not needed — forms)          | `withIdempotency(...)`         |
+| **Used by**       | Whop Tasks UI                 | external clients per the brief |
 
 If you need to add a third caller (Slack bot, cron job, mobile app), reach for the API route. Don't add a new service path.
 
@@ -252,11 +254,11 @@ If you need to add a third caller (Slack bot, cron job, mobile app), reach for t
 
 ## Tests (16, focused on the logic core)
 
-| File | What it proves |
-| --- | --- |
-| `tests/money.test.ts` | `toCents` parses + rejects malformed input; `formatCents` rounds correctly; BigInt JSON roundtrips |
+| File                              | What it proves                                                                                                       |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `tests/money.test.ts`             | `toCents` parses + rejects malformed input; `formatCents` rounds correctly; BigInt JSON roundtrips                   |
 | `tests/validators/manual.test.ts` | `ManualValidator` returns the reviewer's decision; rejects wrong-kind reviewer, non-owner business, missing decision |
-| `tests/services/reviews.test.ts` | Approve creates a `Payment` and flips status in one transaction; reject does neither; double-review throws |
+| `tests/services/reviews.test.ts`  | Approve creates a `Payment` and flips status in one transaction; reject does neither; double-review throws           |
 
 No UI tests, no E2E, no idempotency unit test — the curl walkthrough in [`README.md`](../README.md) covers that surface.
 

@@ -128,7 +128,8 @@ async function main() {
       businessId: "biz_pixel",
       title: "Lighthouse audit of our pricing page",
       description: "Run Lighthouse on pricing.example.com and report top 3 perf wins.",
-      submissionCriteria: "URL to a Gist with full Lighthouse output + your top-3 prioritized list.",
+      submissionCriteria:
+        "URL to a Gist with full Lighthouse output + your top-3 prioritized list.",
       rewardCents: 6000n,
       category: "research",
     },

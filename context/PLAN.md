@@ -1,6 +1,6 @@
 # Whop Task Marketplace — Phased Plan
 
-Source of truth for *what* and *why* is `CLAUDE.md`. This file is the *how*: ordered phases, each ending in a verifiable state. **Status: shipped.** Boxes below are checked against the actual repo state.
+Source of truth for _what_ and _why_ is `CLAUDE.md`. This file is the _how_: ordered phases, each ending in a verifiable state. **Status: shipped.** Boxes below are checked against the actual repo state.
 
 The full plan (with rationale and tradeoffs) lives at `~/.claude/plans/here-is-the-project-cuddly-robin.md`.
 

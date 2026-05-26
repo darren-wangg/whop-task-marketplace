@@ -55,6 +55,7 @@ export async function Header() {
               avatarUrl: a.avatarUrl,
             }))}
             currentId={actor.id}
+            currentKind={actor.kind}
           />
           <ThemeToggle appearance={theme.appearance} />
         </div>

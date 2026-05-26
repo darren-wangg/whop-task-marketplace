@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Avatar, Badge, Card, Heading, Link as FUILink, Separator, Text } from "frosted-ui";
 import { db } from "@/server/db";
-import { requireActor } from "@/server/actor";
+import { requirePageActor } from "@/server/actor";
 import { formatCents } from "@/lib/money";
 import { ReviewControls } from "@/components/forms/ReviewControls";
 import { FadeIn } from "@/components/motion/FadeIn";
@@ -12,7 +12,7 @@ interface PageProps {
 
 export default async function BusinessTaskPage({ params }: PageProps) {
   const { id } = await params;
-  const actor = await requireActor("business");
+  const actor = await requirePageActor("business");
 
   const task = await db.task.findUnique({
     where: { id },
@@ -73,10 +73,7 @@ export default async function BusinessTaskPage({ params }: PageProps) {
                   subtitle={`Submitted ${new Date(a.submission!.submittedAt).toLocaleString()}`}
                 />
                 <Separator size="4" className="my-3" />
-                <SubmissionDetails
-                  url={a.submission!.submissionUrl}
-                  notes={a.submission!.notes}
-                />
+                <SubmissionDetails url={a.submission!.submissionUrl} notes={a.submission!.notes} />
                 <Separator size="4" className="my-3" />
                 <ReviewControls submissionId={a.submission!.id} taskId={task.id} />
               </Card>
@@ -117,11 +114,7 @@ export default async function BusinessTaskPage({ params }: PageProps) {
                       : ""
                   }
                 />
-                <Badge
-                  color={a.status === "approved" ? "green" : "tomato"}
-                  variant="soft"
-                  size="1"
-                >
+                <Badge color={a.status === "approved" ? "green" : "tomato"} variant="soft" size="1">
                   {a.status}
                   {a.status === "approved" && a.submission?.payment
                     ? ` • ${formatCents(a.submission.payment.amountCents)}`
@@ -131,10 +124,7 @@ export default async function BusinessTaskPage({ params }: PageProps) {
               {a.submission && (
                 <>
                   <Separator size="4" className="my-3" />
-                  <SubmissionDetails
-                    url={a.submission.submissionUrl}
-                    notes={a.submission.notes}
-                  />
+                  <SubmissionDetails url={a.submission.submissionUrl} notes={a.submission.notes} />
                   {a.submission.reviewerNotes && (
                     <Text size="1" color="gray" render={<p className="mt-2" />}>
                       Your note: {a.submission.reviewerNotes}

@@ -1,20 +1,18 @@
 import Link from "next/link";
 import { Badge, Card, Heading, Separator, Text } from "frosted-ui";
-import { requireActor } from "@/server/actor";
+import { requirePageActor } from "@/server/actor";
 import { listAcceptancesForUser, listPaymentsForUser } from "@/server/services/payments";
 import { formatCents } from "@/lib/money";
 import { FadeIn } from "@/components/motion/FadeIn";
 
 export default async function MePage() {
-  const actor = await requireActor("user");
+  const actor = await requirePageActor("user");
   const [{ payments, totalCents }, acceptances] = await Promise.all([
     listPaymentsForUser(actor),
     listAcceptancesForUser(actor),
   ]);
 
-  const active = acceptances.filter(
-    (a) => a.status === "accepted" || a.status === "submitted",
-  );
+  const active = acceptances.filter((a) => a.status === "accepted" || a.status === "submitted");
   const past = acceptances.filter((a) => a.status === "approved" || a.status === "rejected");
 
   return (
@@ -24,8 +22,8 @@ export default async function MePage() {
           {actor.name}
         </Heading>
         <Text size="2" color="gray" render={<p className="mt-1" />}>
-          Total earned: <strong>{formatCents(totalCents)}</strong> across {payments.length}{" "}
-          payment{payments.length === 1 ? "" : "s"}.
+          Total earned: <strong>{formatCents(totalCents)}</strong> across {payments.length} payment
+          {payments.length === 1 ? "" : "s"}.
         </Text>
       </FadeIn>
 
@@ -115,11 +113,7 @@ export default async function MePage() {
                     {a.businessName} • {formatCents(a.rewardCents)}
                   </Text>
                 </div>
-                <Badge
-                  color={a.status === "approved" ? "green" : "tomato"}
-                  variant="soft"
-                  size="1"
-                >
+                <Badge color={a.status === "approved" ? "green" : "tomato"} variant="soft" size="1">
                   {a.status}
                 </Badge>
               </div>

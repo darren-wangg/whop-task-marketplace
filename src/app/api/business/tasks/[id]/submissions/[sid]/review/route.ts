@@ -11,20 +11,17 @@ export async function POST(
   const { sid } = await ctx.params;
   const actor = await requireActorOrError("business");
   if (actor instanceof Response) return actor;
-  return withIdempotency(
-    { scope: "reviews.create", actorId: actor.id, request: req },
-    async () => {
-      const body = await req.json().catch(() => null);
-      const parsed = reviewSubmissionSchema.safeParse({ ...body, submissionId: sid });
-      if (!parsed.success) {
-        return { status: 400, body: { error: "bad_request", issues: parsed.error.issues } };
-      }
-      try {
-        const result = await reviewSubmission(parsed.data, actor);
-        return { status: 200, body: result };
-      } catch (err) {
-        return errorBody(err);
-      }
-    },
-  );
+  return withIdempotency({ scope: "reviews.create", actorId: actor.id, request: req }, async () => {
+    const body = await req.json().catch(() => null);
+    const parsed = reviewSubmissionSchema.safeParse({ ...body, submissionId: sid });
+    if (!parsed.success) {
+      return { status: 400, body: { error: "bad_request", issues: parsed.error.issues } };
+    }
+    try {
+      const result = await reviewSubmission(parsed.data, actor);
+      return { status: 200, body: result };
+    } catch (err) {
+      return errorBody(err);
+    }
+  });
 }

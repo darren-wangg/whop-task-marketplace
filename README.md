@@ -65,16 +65,16 @@ curl -H "Cookie: actorId=usr_ada" http://localhost:3000/api/payments
 
 ## Commands
 
-| Command | What |
-| --- | --- |
-| `pnpm dev` | Dev server (Turbopack) |
-| `pnpm build` | `prisma generate && next build` |
-| `pnpm lint` / `pnpm typecheck` / `pnpm format` | Quality gates |
-| `pnpm test` | Vitest (16 unit tests covering money, manual validator, review service) |
-| `pnpm db:push` | Sync schema → DB without migration files |
-| `pnpm db:migrate` | Create a migration file |
-| `pnpm db:seed` | Reseed deterministic fixtures (idempotent — re-runnable) |
-| `pnpm db:push --force-reset && pnpm db:seed` | Nuke and reseed |
+| Command                                        | What                                                                    |
+| ---------------------------------------------- | ----------------------------------------------------------------------- |
+| `pnpm dev`                                     | Dev server (Turbopack)                                                  |
+| `pnpm build`                                   | `prisma generate && next build`                                         |
+| `pnpm lint` / `pnpm typecheck` / `pnpm format` | Quality gates                                                           |
+| `pnpm test`                                    | Vitest (16 unit tests covering money, manual validator, review service) |
+| `pnpm db:push`                                 | Sync schema → DB without migration files                                |
+| `pnpm db:migrate`                              | Create a migration file                                                 |
+| `pnpm db:seed`                                 | Reseed deterministic fixtures (idempotent — re-runnable)                |
+| `pnpm db:push --force-reset && pnpm db:seed`   | Nuke and reseed                                                         |
 
 ## Deploy to Vercel
 

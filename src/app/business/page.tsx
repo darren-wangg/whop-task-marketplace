@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { Badge, Button, Card, Heading, Text } from "frosted-ui";
-import { requireActor } from "@/server/actor";
+import { requirePageActor } from "@/server/actor";
 import { listBusinessTasks } from "@/server/services/tasks";
 import { formatCents } from "@/lib/money";
 import { FadeIn } from "@/components/motion/FadeIn";
 
 export default async function BusinessDashboardPage() {
-  const actor = await requireActor("business");
+  const actor = await requirePageActor("business");
   const tasks = await listBusinessTasks(actor);
 
   return (

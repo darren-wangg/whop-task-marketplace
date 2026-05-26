@@ -3,10 +3,7 @@ import { Prisma, type Account, type Task, type TaskAcceptance } from "@prisma/cl
 import { db } from "@/server/db";
 import { badRequest, conflict, forbidden, notFound } from "@/server/errors";
 import { toCents } from "@/lib/money";
-import type {
-  CreateTaskInput,
-  ListTasksFilters,
-} from "@/lib/schemas";
+import type { CreateTaskInput, ListTasksFilters } from "@/lib/schemas";
 
 const PAGE_SIZE = 24;
 
@@ -91,9 +88,7 @@ export async function getTask(id: string, actor: Account): Promise<TaskDetail> {
   return { task, myAcceptance };
 }
 
-export async function listBusinessTasks(
-  actor: Account,
-): Promise<
+export async function listBusinessTasks(actor: Account): Promise<
   Array<
     Task & {
       _count: { acceptances: number };
